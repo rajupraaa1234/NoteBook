@@ -1,14 +1,21 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { View, Text, StyleSheet,TextInput, Dimensions } from 'react-native';
 import colors from '../misc/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 // create a component
-const SearchBar = () => {
+const SearchBar = ({value,onChangeText,onClear}) => {
     return (
         <View style={styles.container}>
-              <TextInput style={styles.searchInputStyle} placeholder ="  Search..." />  
+              <TextInput value={value} onChangeText={onChangeText} style={styles.searchInputStyle} placeholder ="  Search..." />  
+              <Icon name="ios-close-circle-outline" 
+                    size={30} 
+                    onPress={onClear}
+                    color="black" 
+                    style={{position:'absolute',padding:5,right:8,opacity:0.7, justifyContent:'center',alignContent:'center'}} />
+              
         </View>
     );
 };

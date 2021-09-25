@@ -9,6 +9,7 @@ import AddNotesScreen from './AddNotesScreen';
 
 import Note from '../components/Note';
 import { useNotes } from '../../Context/NodeProvider';
+import NoResultFoud from '../components/NoResultFoud';
 
 // create a component
 
@@ -17,7 +18,9 @@ const NoteBookScreen = ({navigation}) => {
     const[greet,setGreet] = useState('');
     const[user,setUser] = useState('');
     const[ModalVisibal,setModalVisible] = useState(false);
-    const{notes,setNotes} = useNotes();
+    const{notes,setNotes,findNotes} = useNotes();
+    const[noResult,setNoResult] = useState(false);
+    const[searchQuery,setSearchQuery] = useState('');
     //const[notes,setNotes] = useState([]);
 
 
@@ -40,14 +43,7 @@ const NoteBookScreen = ({navigation}) => {
           }
       };
 
-    const findNotes = async ()  => {
-         const result =await AsyncStorage.getItem('notes');
-         if(result!=null){
-             setNotes(JSON.parse(result));
-             console.log(result);
-         }
-    }  
-      
+  
     useEffect(() =>{
          findGreet();
          findUser();
@@ -72,21 +68,48 @@ const NoteBookScreen = ({navigation}) => {
     const hadleOnClickEvent = (item) =>{
         navigation.navigate('NoteDetailScreen',{item});
     }
+    
+    const handleOnChangeText = async (text) =>{
+        setSearchQuery(text);
+        if(!text.trim()){
+            setSearchQuery('');
+            setNoResult(false);
+            return await findNotes();
+        }
+        const filteredNotes = notes.filter(note=>{
+               if(note.title.toLowerCase().includes(text.toLowerCase())){
+                   return note;
+               }
+        });
+        if(filteredNotes.length){
+            setNotes([...filteredNotes]);
+            setNoResult(false);
+        }else{
+            setNoResult(true);
+        }
+    };
 
+    const handleOnClear = async ()=>{
+         setSearchQuery('')
+         setNoResult(false)
+         await findNotes()
+    }
 
     return (
         <>  
            <StatusBar backgroundColor={colors.LIGHT} barStyle="dark-content"/>
             <View style={styles.container}>
                 <Text style={styles.StatusBarText}>{greet} {user.name} </Text>
-                {notes.length!=0 ?  <SearchBar/> : null }
-               
-                <FlatList style={{ marginHorizontal:20}} data={notes} 
-                    keyExtractor={(item)=>item.id.toString() }
-                    numColumns={2}
-                    columnWrapperStyle={{justifyContent:'space-between'}}
-                    renderItem={({item})=> <Note item={item} onClickEvent={()=>hadleOnClickEvent(item)}/>}
-                />
+                {notes.length!=0 ?  <SearchBar value={searchQuery} onChangeText={handleOnChangeText} onClear={handleOnClear}  /> : null }
+
+                {noResult ? <NoResultFoud /> : 
+                        <FlatList style={{ marginHorizontal:20}} data={notes} 
+                            keyExtractor={(item)=>item.id.toString() }
+                            numColumns={2}
+                            columnWrapperStyle={{justifyContent:'space-between'}}
+                            renderItem={({item})=> <Note item={item} onClickEvent={()=>hadleOnClickEvent(item)}/>}
+                        />
+                }
                     {notes.length==0 ? 
                         <Text style={styles.emptyHeader}>
                             Add Note
