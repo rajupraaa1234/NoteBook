@@ -1,11 +1,11 @@
 //import liraries
 
-import React, { Component,useState } from 'react';
+import React, { Component,useEffect,useState } from 'react';
 import {View,Button,TextInput,StyleSheet, Dimensions, Keyboard,TouchableWithoutFeedback,Modal} from 'react-native';
 
 import colors from '../misc/colors';
 // create a component
-const AddNotesScreen = ({visible,onClose,onSubmit}) => {
+const AddNotesScreen = ({visible,onClose,onSubmit,isEdit,Etitle,Edesc}) => {
 
     const [title, setTitle] = useState('');
     const [Desc, setDesc] = useState('');
@@ -14,20 +14,37 @@ const AddNotesScreen = ({visible,onClose,onSubmit}) => {
         Keyboard.dismiss();
     };
 
+    const setEditData=()=>{
+        console.log("setEditData");
+       if(isEdit){
+           console.log("if setEditData");
+           console.log(Edesc);
+           console.log(Etitle);
+           setTitle(Etitle);
+           setDesc(Edesc);
+       }
+    }
+
+    useEffect(()=>{
+        setEditData();
+    },[]);
+
     const submitDetail = () =>{
          if(!title.trim() && !Desc.trim()){
              return onClose();
          }
+         if(!isEdit){
+            setTitle('');
+            setDesc('');
+         }
          onSubmit(title,Desc);
-         setTitle('');
-         setDesc('');
     }
 
     return (
         <>
             <Modal visible={visible} animationType="fade" >
-                <TextInput placeholder="Enter your title name" style={styles.InputText1} onChangeText={(text)=>{setTitle(text)}}/> 
-                <TextInput placeholder="Enter your Description here..." multiline style={styles.InputText2} onChangeText={(text)=>{setDesc(text)}}/>
+                <TextInput placeholder="Enter your title name" style={styles.InputText1} value={title} onChangeText={(text)=>{setTitle(text)}}/> 
+                <TextInput placeholder="Enter your Description here..." multiline style={styles.InputText2} value={Desc} onChangeText={(text)=>{setDesc(text)}}/>
                 <View style={{marginTop:20,borderRadius:20,marginLeft:20,marginRight:20}}>
                     <Button
                         onPress={submitDetail}
@@ -41,9 +58,6 @@ const AddNotesScreen = ({visible,onClose,onSubmit}) => {
                 <TouchableWithoutFeedback onPress={onnOutSidePress} >
                     <View style={{flex:1}} />
                 </TouchableWithoutFeedback>
-
-                
-
             </Modal>
         </>
     );

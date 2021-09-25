@@ -1,18 +1,20 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { Component,useEffect, useState  } from 'react';
 import { View, Text, StyleSheet,ScrollView, Alert } from 'react-native';
 import colors from '../misc/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNotes } from '../../Context/NodeProvider';
-
+import AddNotesScreen from './AddNotesScreen';
 
 
 
 
 // create a component
 const NoteDetailScreen = (props) => {
+    const[note,setNote] = useState(props.route.params.item);
     const { setNotes } = useNotes();
+    const[ModalVisibal,setModalVisible] = useState(false);
 
     const ConfirmDelete = async ()=>{
         console.log("raju kumar");
@@ -36,14 +38,36 @@ const NoteDetailScreen = (props) => {
                 text:"No Thanks",
                 onPress:()=>{}
            }
-    
-        ]);
-        
+        ]);    
     }
     
     const onEditPress = () =>{
+        setModalVisible(true);
          console.log("Edit");
     };
+    const HandleOnSubmit = async (title,Desc)=>{
+        console.log("Edit Submited");
+        const result = await AsyncStorage.getItem('notes');
+        let notes = [];
+        if(result !== null){
+            notes=JSON.parse(result);
+        }
+        const newData = notes.filter(n =>{
+            if(n.id === props.route.params.item.id){
+                n.title = title
+                n.desc = Desc
+                n.time = Date.now();
+                setNote(n);
+            }
+            return n;
+        })
+        
+        setNotes(newData);
+        await AsyncStorage.setItem('notes',JSON.stringify(newData));
+         setModalVisible(false);
+         
+    };
+
     const formatTime = (ms) =>{
         const date = new Date(ms);
         const day = date.getDate();
@@ -58,13 +82,15 @@ const NoteDetailScreen = (props) => {
     return (
         <View style={styles.container}>
             
-            <Text style={styles.datePicker} >{`Created At  ${formatTime(props.route.params.item.time)}`}</Text> 
-            <Text style={styles.TitleStyle}>{props.route.params.item.title}</Text>
+            <Text style={styles.datePicker} >{`Created At  ${formatTime(note.time)}`}</Text> 
+            <Text style={styles.TitleStyle}>{note.title}</Text>
             
              <ScrollView style={{marginTop:10}}>
-                 <Text style={styles.DescStyle}>{props.route.params.item.desc}</Text>
+                 <Text style={styles.DescStyle}>{note.desc}</Text>
                 
              </ScrollView>
+             <AddNotesScreen visible={ModalVisibal} onClose={()=>{setModalVisible(false)}} onSubmit={HandleOnSubmit} isEdit={true} 
+                                            Etitle= {note.title} Edesc = {note.desc}/>
              <View style={styles.PlusStyle}>
                   <Icon name="trash-outline"  size={30} color="#fff" onPress={onDeletePress}  />
              </View> 

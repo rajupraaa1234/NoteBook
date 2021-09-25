@@ -96,7 +96,7 @@ const NoteBookScreen = ({navigation}) => {
                      <View style={styles.PlusStyle}>
                           <Icon name="ios-add" onPress={ClickAdd} size={30} color="#fff"  />
                      </View> 
-                     <AddNotesScreen visible={ModalVisibal} onClose={()=>{setModalVisible(false)}} onSubmit={HandleOnSubmit}/>
+                     <AddNotesScreen visible={ModalVisibal} onClose={()=>{setModalVisible(false)}} onSubmit={HandleOnSubmit} isEdit={false} />
                 </View>
             </View>
         </>
