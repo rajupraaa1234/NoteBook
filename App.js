@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+ import SplashScreen from 'react-native-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect ,useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -39,6 +39,7 @@ const App = () => {
       }
   };
   useEffect(()=>{
+    SplashScreen.hide();
     findUser();
   });
   // if(!user.name) return <Home onFinish={findUser}/>
