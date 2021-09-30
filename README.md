@@ -16,3 +16,5 @@ This is Simple NoteBook Using React Native and React Native and Async Storage. Y
 ![with_note](https://user-images.githubusercontent.com/48593134/135394374-0baf12f4-70ab-43d9-a1d2-436926e5c83d.png)
 
 ![detail](https://user-images.githubusercontent.com/48593134/135394478-98bc5cc3-c2ab-442b-9ffb-c5b74df73e45.png)
+
+![delete](https://user-images.githubusercontent.com/48593134/135394586-9ac16f71-4cce-45e2-a46d-91f75ca311bd.png)
