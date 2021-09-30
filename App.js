@@ -34,7 +34,8 @@ const App = () => {
       if(res!=null){
         setUser(JSON.parse(res));
         SetNewUser(true);
-      }else{
+      }else{ 
+        //Else
         SetNewUser(false);
       }
   };
