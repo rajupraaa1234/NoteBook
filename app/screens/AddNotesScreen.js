@@ -26,6 +26,7 @@ const AddNotesScreen = ({visible,onClose,onSubmit,isEdit,Etitle,Edesc}) => {
     }
 
     useEffect(()=>{
+        //zfhbjbvj
         setEditData();
     },[]);
 
