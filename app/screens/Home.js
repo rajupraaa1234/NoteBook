@@ -18,7 +18,7 @@ const Home = ({navigation}) =>{
     const handleSubmit =async ()=>{
         const user = {name : name}
 
-        // This is Raju
+        // This is Raju kumar
         await AsyncStorage.setItem('user',JSON.stringify(user));  
         console.log('submit');   
         navigation.navigate('NoteBookScreen1');
