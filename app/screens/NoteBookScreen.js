@@ -13,7 +13,7 @@ import NoResultFoud from '../components/NoResultFoud';
 
 // create a component
 
-
+//This is Raju 
 const NoteBookScreen = ({navigation}) => {
     const[greet,setGreet] = useState('');
     const[user,setUser] = useState('');
