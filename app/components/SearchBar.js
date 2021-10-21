@@ -21,7 +21,7 @@ const SearchBar = ({value,onChangeText,onClear}) => {
 };
 
 // define your styles
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({    
     container: {
         marginHorizontal:20,
         marginVertical:5,
